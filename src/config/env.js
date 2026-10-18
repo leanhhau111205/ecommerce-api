@@ -8,6 +8,10 @@ for (const key of required) {
   }
 }
 
+if (process.env.JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET phải dài ít nhất 32 ký tự');
+}
+
 export const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: Number(process.env.PORT) || 3000,

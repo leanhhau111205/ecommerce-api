@@ -1,5 +1,6 @@
 import express from 'express';
 import healthRoutes from './routes/health.routes.js';
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/health', healthRoutes);
+app.use('/api/auth', authRoutes);
 
 // 404: không khớp route nào
 app.use((req, res) => {
@@ -18,9 +20,13 @@ app.use((req, res) => {
 
 // Xử lý lỗi tập trung (phải có đủ 4 tham số)
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.status || 500).json({
-    message: err.message || 'Lỗi máy chủ',
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({ message: 'JSON không hợp lệ' });
+  }
+  const status = err.status || 500;
+  if (status >= 500) console.error(err);
+  res.status(status).json({
+    message: status >= 500 ? 'Lỗi máy chủ' : err.message,
   });
 });
 
