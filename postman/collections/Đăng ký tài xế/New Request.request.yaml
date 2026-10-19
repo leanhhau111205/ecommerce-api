@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/api/drivers/register/phone"
+method: POST
+body:
+  type: json
+  content: "   {\r
+
+    \     \"phone\": \"{{phone}}\"\r
+
+    \   }"
+scripts:
+  - type: afterResponse
+    code: "   pm.test('Status 200', () => pm.response.to.have.status(200));\r
+
+      \   pm.collectionVariables.set('otp', pm.response.json().devOtp);"
+    language: text/javascript
+order: 1000

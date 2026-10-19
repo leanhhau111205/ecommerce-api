@@ -1,0 +1,6 @@
+$kind: collection
+variables:
+  baseUrl: ""
+  phone: ""
+  otp: ""
+  registrationToken: ""
